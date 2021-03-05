@@ -5,11 +5,14 @@
  */
 package Vista;
 
+import Controlador.Usuario;
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Dimension;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -21,8 +24,14 @@ public class JFrmMDI extends javax.swing.JFrame {
     /**
      * Creates new form JFrmMDI
      */
-    public JFrmMDI() {
+    
+    public JFrmMDI() throws UnknownHostException {
         initComponents();
+        MDI_Components mdi_componentes = new MDI_Components();
+        JFrmLogin jfrmLogin = new JFrmLogin();
+        
+        //this.setTitle("Sistema Universitario: <" + mdi_componentes.getUsuario() +">"+"<" + mdi_componentes.getIp()+ ">");
+        this.setTitle("Sistema Universitario: <" + jfrmLogin.usuario +">"+"<" + mdi_componentes.getIp()+ ">");
     }
 
     /**
@@ -37,7 +46,7 @@ public class JFrmMDI extends javax.swing.JFrame {
         JDPMDIContainer = new javax.swing.JDesktopPane();
         JMenuBarMDI = new javax.swing.JMenuBar();
         JMenuItenCS = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        JMICS = new javax.swing.JMenuItem();
         JMenuCatalogos = new javax.swing.JMenu();
         JMenuItemFacultades = new javax.swing.JMenuItem();
         JMenuProcesos = new javax.swing.JMenu();
@@ -51,7 +60,7 @@ public class JFrmMDI extends javax.swing.JFrame {
         JMenuAyuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistema Universitario: <usuario> <ip> <datetime>");
+        setTitle("Sistema Universitario: <usuario> <ip>");
         setResizable(false);
 
         JDPMDIContainer.setBackground(new java.awt.Color(10, 40, 50));
@@ -69,8 +78,13 @@ public class JFrmMDI extends javax.swing.JFrame {
 
         JMenuItenCS.setText("Archivo");
 
-        jMenuItem1.setText("Cerrar Sesión");
-        JMenuItenCS.add(jMenuItem1);
+        JMICS.setText("Cerrar Sesión");
+        JMICS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JMICSActionPerformed(evt);
+            }
+        });
+        JMenuItenCS.add(JMICS);
 
         JMenuBarMDI.add(JMenuItenCS);
 
@@ -146,6 +160,17 @@ public class JFrmMDI extends javax.swing.JFrame {
         JDPMDIContainer.add(jintfrm_mantfacultades);
     }//GEN-LAST:event_JMenuItemFacultadesActionPerformed
 
+    private void JMICSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMICSActionPerformed
+        /*===== OPERACIÓN CERRAR SESIÓN ====
+          Variable entera respuesta_cs*/
+
+        int respuesta_cs = JOptionPane.showConfirmDialog(this, "¿Desea Cerrar Sesión?", "Cerrar Sesión", JOptionPane.YES_NO_OPTION);
+
+        if (respuesta_cs == 0) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_JMICSActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -161,13 +186,18 @@ public class JFrmMDI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrmMDI().setVisible(true);
+                try {
+                    new JFrmMDI().setVisible(true);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(JFrmMDI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane JDPMDIContainer;
+    private javax.swing.JMenuItem JMICS;
     private javax.swing.JMenu JMenuAsignaciones;
     private javax.swing.JMenu JMenuAyuda;
     private javax.swing.JMenuBar JMenuBarMDI;
@@ -181,6 +211,5 @@ public class JFrmMDI extends javax.swing.JFrame {
     private javax.swing.JMenuItem JMenuItemRegAct;
     private javax.swing.JMenu JMenuItenCS;
     private javax.swing.JMenu JMenuProcesos;
-    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 }
