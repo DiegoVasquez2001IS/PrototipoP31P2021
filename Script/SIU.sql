@@ -141,3 +141,11 @@ CREATE TABLE asignacioncursosmastros
   FOREIGN KEY (codigo_maestro) REFERENCES maestros(codigo_maestro)
   ) ENGINE = InnoDB DEFAULT CHARSET=latin1;
 
+--CREANDO TABLA USUARIOS
+CREATE TABLE IF NOT EXISTS usuario (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(60) NOT NULL,
+  password VARCHAR(25)NOT NULL,
+  PRIMARY KEY (id_usuario) )
+ENGINE = InnoDB CHARACTER SET = latin1;
+----------------------------------------------
