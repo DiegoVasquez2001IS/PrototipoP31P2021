@@ -5,7 +5,14 @@
  */
 package Vista;
 
+import Controlador.Usuario;
+import Modelo.UsuarioDAO;
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.HeadlessException;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 /**
@@ -17,6 +24,8 @@ public class JFrmLogin extends javax.swing.JFrame {
     /**
      * Creates new form JFrmLogin
      */
+    public String usuario="";
+    
     public JFrmLogin() {
         initComponents();
     }
@@ -48,6 +57,11 @@ public class JFrmLogin extends javax.swing.JFrame {
 
         JBtnAcceder.setText("Acceder");
         JBtnAcceder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JBtnAcceder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBtnAccederActionPerformed(evt);
+            }
+        });
 
         JLblTitle.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         JLblTitle.setText("Sistema Universitario");
@@ -96,6 +110,44 @@ public class JFrmLogin extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void JBtnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBtnAccederActionPerformed
+        if (JTxtUsuario.getText().trim().isEmpty() || JPfPassword.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "NO PUEDEN HABER CAMPOS VACIOS", "ERROR", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Usuario usuarioAConsultar = new Usuario();
+                UsuarioDAO usuarioDAO = new UsuarioDAO();
+                usuarioAConsultar.setUsername(JTxtUsuario.getText().trim());
+                // Recuperación de información a través de otro objeto
+                usuarioAConsultar = usuarioDAO.query(usuarioAConsultar);
+
+                if (JPfPassword.getText().equals(usuarioAConsultar.getPassword()) && JTxtUsuario.getText().equals(usuarioAConsultar.getUsername())) {
+                    
+                    //MDI_Components mdi_componentes = new MDI_Components();
+                    //mdi_componentes.setUsuario(usuarioAConsultar.getUsername());
+                    
+                    JOptionPane.showMessageDialog(null, "Bienvenido\n", "Mensaje de bienvenida", JOptionPane.INFORMATION_MESSAGE);
+
+                    JFrmMDI menuGeneral = new JFrmMDI();
+                    menuGeneral.setVisible(true);
+                    usuario = JTxtUsuario.getText();
+                    this.dispose();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "ERROR AL ENCONTRAR USUARIO o CONTRASEÑA", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    JPfPassword.setText("");
+                    JTxtUsuario.setText("");
+                }
+            } catch (HeadlessException e) {
+                JOptionPane.showMessageDialog(this, "ERROR AL ENCONTRAR USUARIO o CONTRASEÑA", "ERROR", JOptionPane.ERROR_MESSAGE);
+                JPfPassword.setText("");
+                JTxtUsuario.setText("");
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(JFrmLogin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_JBtnAccederActionPerformed
 
     /**
      * @param args the command line arguments
