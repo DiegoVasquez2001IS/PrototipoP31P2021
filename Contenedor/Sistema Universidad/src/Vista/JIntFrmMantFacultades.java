@@ -146,9 +146,19 @@ public class JIntFrmMantFacultades extends javax.swing.JInternalFrame {
 
         CmdModificar.setText("Modificar");
         CmdModificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CmdModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmdModificarActionPerformed(evt);
+            }
+        });
 
         CmdBuscar.setText("Buscar");
         CmdBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CmdBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmdBuscarActionPerformed(evt);
+            }
+        });
 
         CmdLimpiar.setText("Limpiar");
         CmdLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -160,6 +170,11 @@ public class JIntFrmMantFacultades extends javax.swing.JInternalFrame {
 
         CmdEliminar.setText("Eliminar");
         CmdEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CmdEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CmdEliminarActionPerformed(evt);
+            }
+        });
 
         JTxtBuscar.setToolTipText("Puede ingresar el código de la facultad o bien presionar el botón de puntos suspensivos (...) para hacer más fácil su búsqueda");
 
@@ -318,6 +333,73 @@ public class JIntFrmMantFacultades extends javax.swing.JInternalFrame {
         JTxtNomFacultad.setText("");
         BtnGroupEF.clearSelection();
     }//GEN-LAST:event_CmdLimpiarActionPerformed
+
+    private void CmdModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmdModificarActionPerformed
+        Facultad facultad = new Facultad();
+        FacultadDAO facultadDAO = new FacultadDAO();
+
+        if (JTxtCodFacultad.getText().length() != 0 && JTxtNomFacultad.getText().length() != 0) {
+            String codigo_facultad = JTxtCodFacultad.getText();
+            String nombre_facultad = JTxtNomFacultad.getText();
+
+            facultad.setCodigo_facultad(codigo_facultad);
+            facultad.setNombre_facultad(nombre_facultad);
+
+            if (JRBActivo.isSelected()) {
+                facultad.setEstado_facultad("A");
+            } else {
+                facultad.setEstado_facultad("I");
+            }
+
+            facultadDAO.update(facultad);
+
+            try {
+                llenar_tabla();
+            } catch (SQLException ex) {
+                Logger.getLogger(JIntFrmMantFacultades.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Hay campos vacíos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_CmdModificarActionPerformed
+
+    private void CmdEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmdEliminarActionPerformed
+        Facultad facultad = new Facultad();
+        FacultadDAO facultadDAO = new FacultadDAO();
+
+        if (JTxtCodFacultad.getText().length() != 0 && JTxtNomFacultad.getText().length() != 0) {
+            String codigo_facultad = JTxtCodFacultad.getText();
+
+            facultad.setCodigo_facultad(codigo_facultad);
+
+            facultadDAO.delete(facultad);
+
+            try {
+                llenar_tabla();
+            } catch (SQLException ex) {
+                Logger.getLogger(JIntFrmMantFacultades.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Hay campos vacíos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_CmdEliminarActionPerformed
+
+    private void CmdBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CmdBuscarActionPerformed
+        Facultad facultad = new Facultad();
+        FacultadDAO facultadDAO = new FacultadDAO();
+        facultad.setCodigo_facultad(JTxtBuscar.getText());
+
+        facultad = facultadDAO.query(facultad);
+
+        JTxtCodFacultad.setText(facultad.getCodigo_facultad());
+        JTxtNomFacultad.setText(facultad.getNombre_facultad());
+        String val_estatus = facultad.getEstado_facultad();
+        if (val_estatus.equals("A")) {
+            JRBActivo.setSelected(true);
+        } else {
+            JRBInactivo.setSelected(true);
+        }
+    }//GEN-LAST:event_CmdBuscarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -7,6 +7,9 @@ package Vista;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -130,7 +133,12 @@ public class JFrmMDI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JMenuItemFacultadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JMenuItemFacultadesActionPerformed
-        JIntFrmMantFacultades jintfrm_mantfacultades = new JIntFrmMantFacultades();
+        JIntFrmMantFacultades jintfrm_mantfacultades = null;
+        try {
+            jintfrm_mantfacultades = new JIntFrmMantFacultades();
+        } catch (SQLException ex) {
+            Logger.getLogger(JFrmMDI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Dimension main_window_size =  JDPMDIContainer.getSize();
         Dimension second_window_size = jintfrm_mantfacultades.getSize();
         jintfrm_mantfacultades.setLocation((main_window_size.width - second_window_size.width) / 2, (main_window_size.height - second_window_size.height) / 2);
